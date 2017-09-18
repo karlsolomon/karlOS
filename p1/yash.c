@@ -108,18 +108,18 @@ int main (void) {
 	j.jobNumber = jobNumber;
 	strcpy(j.command, input);
 
-
-	if(strContains(input, "|")) {
-		token = strSplit(input, '|');
-		handlePipe(&j, token[0], token[1]);
-	} else {
-		pid_ch1 = fork();
-		if(pid_ch1 == 0) {
-			handleChild(&j input);
-		} else {
-			handleParent(1);
-		}
-	}
+	handleJob(&j);
+	// if(strContains(input, "|")) {
+	// 	token = strSplit(input, '|');
+	// 	handlePipe(&j, token[0], token[1]);
+	// } else {
+	// 	pid_ch1 = fork();
+	// 	if(pid_ch1 == 0) {
+	// 		handleChild(&j input);
+	// 	} else {
+	// 		handleParent(1);
+	// 	}
+	// }
 }
 
 void handleParent(int numChildren) {
@@ -188,9 +188,9 @@ void handleRedirect(char* fileName, direction dir) {
 	fclose(file);
 }
 
-void handleJob(job* j, char* command) {
-	bool hasPipe = strContains(command, "|");
-	char** commands = strSplit(command, "|");
+void handleJob(job* j) {
+	bool hasPipe = strContains(j*.command, "|");
+	char** commands = strSplit(j*.command, "|");
 	char** tokens = strSplit(child, ' ');
 	char** child1Args;
 	char** child2Args;
