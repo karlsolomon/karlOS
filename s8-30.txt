@@ -1,0 +1,16 @@
+Script started on Wed 30 Aug 2017 09:32:25 CDT
+]0;ramesh@linuxmint ~/EE461S/recordings[01;32mramesh@linuxmint[00m [01;34m~/EE461S/recordings $[00m ls
+s8-30.txt  t8-30.txt
+]0;ramesh@linuxmint ~/EE461S/recordings[01;32mramesh@linuxmint[00m [01;34m~/EE461S/recordings $[00m ps -r[Kef|grep bash
+ramesh    2214  2210  0 Aug29 pts/0    00:00:00 [01;31m[Kbash[m[K
+ramesh    8583  2210  0 07:10 pts/1    00:00:00 [01;31m[Kbash[m[K
+ramesh    9214  2210  0 09:02 pts/4    00:00:00 [01;31m[Kbash[m[K
+ramesh    9688  9687  0 09:32 pts/2    00:00:00 [01;31m[Kbash[m[K -i
+ramesh    9707  9688  0 09:32 pts/2    00:00:00 grep --color=auto [01;31m[Kbash[m[K
+]0;ramesh@linuxmint ~/EE461S/recordings[01;32mramesh@linuxmint[00m [01;34m~/EE461S/recordings $[00m 
+]0;ramesh@linuxmint ~/EE461S/recordings[01;32mramesh@linuxmint[00m [01;34m~/EE461S/recordings $[00m 
+]0;ramesh@linuxmint ~/EE461S/recordings[01;32mramesh@linuxmint[00m [01;34m~/EE461S/recordings $[00m 
+]0;ramesh@linuxmint ~/EE461S/recordings[01;32mramesh@linuxmint[00m [01;34m~/EE461S/recordings $[00m 
+]0;ramesh@linuxmint ~/EE461S/recordings[01;32mramesh@linuxmint[00m [01;34m~/EE461S/recordings $[00m exit
+
+Script done on Wed 30 Aug 2017 10:57:03 CDT

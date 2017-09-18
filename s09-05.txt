@@ -1,0 +1,564 @@
+Script started on Tue 05 Sep 2017 14:10:03 CDT
+]0;ramesh@linuxmint ~/EE461S/sysprog/Pipes[01;32mramesh@linuxmint[00m [01;34m~/EE461S/sysprog/Pipes $[00m ls
+[0m[01;32mecho[0m    echo.c~   echochar.c  [01;32mpipe_ex2[0m    pipe_ex2.c~  pipe_ex.c~
+echo.c  [01;32mechochar[0m  [01;32mpipe_ex[0m     pipe_ex2.c  pipe_ex.c
+]0;ramesh@linuxmint ~/EE461S/sysprog/Pipes[01;32mramesh@linuxmint[00m [01;34m~/EE461S/sysprog/Pipes $[00m gcc -o pipe_ex pipe_ex.c
+]0;ramesh@linuxmint ~/EE461S/sysprog/Pipes[01;32mramesh@linuxmint[00m [01;34m~/EE461S/sysprog/Pipes $[00m ./pipe_ex
+Usage: ./pipe_ex <string>
+]0;ramesh@linuxmint ~/EE461S/sysprog/Pipes[01;32mramesh@linuxmint[00m [01;34m~/EE461S/sysprog/Pipes $[00m ./pipe_ex "Heelo[K[K[K[Ki Hi"
+Hi Hi
+]0;ramesh@linuxmint ~/EE461S/sysprog/Pipes[01;32mramesh@linuxmint[00m [01;34m~/EE461S/sysprog/Pipes $[00m g[Kgdb pipe_ex
+GNU gdb (Ubuntu 7.11-0ubuntu1) 7.11
+Copyright (C) 2016 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+and "show warranty" for details.
+This GDB was configured as "x86_64-linux-gnu".
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:
+<http://www.gnu.org/software/gdb/bugs/>.
+Find the GDB manual and other documentation resources online at:
+<http://www.gnu.org/software/gdb/documentation/>.
+For help, type "help".
+Type "apropos word" to search for commands related to "word"...
+Reading symbols from pipe_ex...(no debugging symbols found)...done.
+(gdb) l
+No symbol table is loaded.  Use the "file" command.
+(gdb) quit
+]0;ramesh@linuxmint ~/EE461S/sysprog/Pipes[01;32mramesh@linuxmint[00m [01;34m~/EE461S/sysprog/Pipes $[00m gdb pipe_ex./pipe_ex "Hi Hi"[Kgcc -o pipe_ex pipe_ex.c[C[1@ [1@-g -o pipe_ex pipe_ex.c [A]0;ramesh@linuxmint ~/EE461S/sysprog/Pipes[01;32mramesh@linuxmint[00m [01;34m~/EE461S/sysprog/Pipes $[00m [C[C[C[C[C[C
+
+]0;ramesh@linuxmint ~/EE461S/sysprog/Pipes[01;32mramesh@linuxmint[00m [01;34m~/EE461S/sysprog/Pipes $[00m gcc -g -o pipe_ex pipe_ex.c [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[16Pdb pipe_ex
+[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C
+GNU gdb (Ubuntu 7.11-0ubuntu1) 7.11
+Copyright (C) 2016 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+and "show warranty" for details.
+This GDB was configured as "x86_64-linux-gnu".
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:
+<http://www.gnu.org/software/gdb/bugs/>.
+Find the GDB manual and other documentation resources online at:
+<http://www.gnu.org/software/gdb/documentation/>.
+For help, type "help".
+Type "apropos word" to search for commands related to "word"...
+Reading symbols from pipe_ex...done.
+(gdb) l
+3	   Here the parent writes a string to the child, which the child prints to the screen
+4	   Original Source: Advanced Programming in the Unix Enviroment, by Richard Stevens
+5	                    http://www.apuebook.com/apue3e.html
+6	   Annotated by: Ramesh Yerraballi
+7	   System Calls used:  fork, wait, pipe 
+8	*/
+9	#include <sys/wait.h>
+10	#include <stdio.h>
+11	#include <stdlib.h>
+12	#include <unistd.h>
+(gdb) l 20
+15	int
+16	main(int argc, char *argv[])
+17	{
+18	    int pipefd[2];
+19	    pid_t cpid;
+20	    char buf;
+21	    
+22	    if (argc != 2) {
+23		fprintf(stderr, "Usage: %s <string>\n", argv[0]);
+24		exit(EXIT_FAILURE);
+(gdb) run "hi hi"
+Starting program: /home/ramesh/EE461S/sysprog/Pipes/pipe_ex "hi hi"
+warning: the debug information found in "/lib64/ld-2.23.so" does not match "/lib64/ld-linux-x86-64.so.2" (CRC mismatch).
+
+hi hi
+[Inferior 1 (process 27788) exited normally]
+(gdb) quit
+]0;ramesh@linuxmint ~/EE461S/sysprog/Pipes[01;32mramesh@linuxmint[00m [01;34m~/EE461S/sysprog/Pipes $[00m gdb pipe_excc -g -o pipe_ex pipe_ex.c [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[16Pdb pipe_ex
+[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ct pipe_exu pipe_exi pipe_ex
+[?1049h[1;21r(B[m[4l[?7h[?1h=[H[2J[14d(B[0;7mNone No process In:                                     L??   PC: ?? [15;1H(B[m[H   (0[0mlqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqk(B[2;4H(0[0mx(B[69G(0[0mx(B[3;4H(0[0mx(B[69G(0[0mx(B[4;4H(0[0mx(B[69G(0[0mx(B[5;4H(0[0mx(B[69G(0[0mx(B[6;4H(0[0mx(B[69G(0[0mx(B[7;4H(0[0mx(B[69G(0[0mx(B[8;4H(0[0mx(B[69G(0[0mx(B[9;4H(0[0mx(B[69G(0[0mx(B[10;4H(0[0mx(B[69G(0[0mx(B[11;4H(0[0mx(B[69G(0[0mx(B[12;4H(0[0mx(B[69G(0[0mx(B[13;4H(0[0mmqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqj(B[1;4H(0[0m(B[7;13H[ No Source Available ][7;13H[23X[H   [7;13H[ No Source Available ][H[7;36H[?1h=[15d[H[2J   (0[0mlqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqk(B[2;4H(0[0mx(B[69G(0[0mx(B[3;4H(0[0mx(B[69G(0[0mx(B[4;4H(0[0mx(B[69G(0[0mx(B[5;4H(0[0mx(B[69G(0[0mx(B[6;4H(0[0mx(B[69G(0[0mx(B[7;4H(0[0mx(B[7;13H(0[0m(B[ No Source Available ][69G(0[0mx(B[8;4H(0[0mx(B[69G(0[0mx(B[9;4H(0[0mx(B[69G(0[0mx(B[10;4H(0[0mx(B[69G(0[0mx(B[11;4H(0[0mx(B[69G(0[0mx(B[12;4H(0[0mx(B[69G(0[0mx(B[13;4H(0[0mmqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqj(B[14;1H(0[0m(B[0;7mNone No process In:                                     L??   PC: ?? [1;1H(B[m[7;36H[14d[H   (0[0;1;7mlqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqk(B(B[m[2;4H(0[0;1;7mx(B(B[m[69G(0[0;1;7mx(B(B[m[3;4H(0[0;1;7mx(B(B[m[69G(0[0;1;7mx(B(B[m[4;4H(0[0;1;7mx(B(B[m[69G(0[0;1;7mx(B(B[m[5;4H(0[0;1;7mx(B(B[m[69G(0[0;1;7mx(B(B[m[6;4H(0[0;1;7mx(B(B[m[69G(0[0;1;7mx(B(B[m[7;4H(0[0;1;7mx(B(B[m[7;13H(0[0;1;7m(B(B[m[23X[69G(0[0;1;7mx(B(B[m[8;4H(0[0;1;7mx(B(B[m[69G(0[0;1;7mx(B(B[m[9;4H(0[0;1;7mx(B(B[m[69G(0[0;1;7mx(B(B[m[10;4H(0[0;1;7mx(B(B[m[69G(0[0;1;7mx(B(B[m[11;4H(0[0;1;7mx(B(B[m[69G(0[0;1;7mx(B(B[m[12;4H(0[0;1;7mx(B(B[m[69G(0[0;1;7mx(B(B[m[13;4H(0[0;1;7mmqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqj(B(B[m[1;4H(0[0;1;7m(B(B[m[7;13H[ No Source Available ][H[15dGNU gdb (Ubuntu 7.11-0ubuntu1) 7.11
+Copyright (C) 2016 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/g[18;1Hpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type "show cop[21;1H---Type <return> to continue, or q <return> to quit---[15dying"[K
+and "show warranty" for details.[K
+This GDB was configured as "x86_64-linux-gnu".[K
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:[K
+<http://www.gnu.org/software/gdb/bugs/>.[K[21;55H[J[15d<http://www.gnu.org/software/gdb/bugs/>.
+---Type <return> to continue, or q <return> to quit---
+Find the GDB manual and other documentation resources online at:
+<http://www.gnu.org/software/gdb/documentation/>.[K
+[5Ghelp, type "help".[K
+Type "apropos word" to search for commands related to "word"...
+Reading symbols from pipe_ex...[15d[M[20;32Hdone.
+[1;7H(B[0;1;7mpipe_ex.c
+[5G(B[m17[13G{
+[5G18[3;17Hint pipefd[2];
+[5G19[4;17Hpid_t cpid;
+[5G20[5;17Hchar buf;
+[5G21
+22[13G    if (argc != 2) {   
+[5G23[8;21Hfprintf(stderr, "Usage: %s <string>\n", argv[0])
+[5G24[9;21Hexit(EXIT_FAILURE);
+[5G25[10;17H}
+[5G26[11;17H// pipe takes a pointer to a 2-element array (pipefd
+[5G27[12;17H// the read and write end of the pipe in pipefd[0] a[1;16H[13d
+(B[0;7mexec
+(B[m[1;16H[13d
+
+[21d(gdb) b 22[15d[M[21d[H[7db+[13d
+
+[M[20dBreakpoint 1 at 0x400854: file pipe_ex.c, line 22.
+(gdb) c run "hi hi"[15d[M[21d[15d[M[20dStarting program: /home/ramesh/EE461S/sysprog/Pipes/pipe_ex "hi hi"
+warning: [15d[2M[19;10Hthe debug information found in "/lib64/ld-2.23.so" does not
+match "/lib64/ld-linux-x86-64.so.2" (CRC mismatch).
+[15d[M[21d[1;16H[7d  [H[7db+[13d
+(B[0;7mnative process 27868 In:
+(B[m[21d[1;16H[7d  [H[7db+[13d
+
+[21d[1;16H[7d  [H[7db+[13d
+
+[21d[1;16H[7d  [H[7db+[13d
+
+[21d[1;16H[7d  [H[7db+[13d
+
+[21d[7d  [H[7dB+[13d[14;26H(B[0;7mmain[14;51HL22   PC: 0x400854
+(B[m[7;5H(B[0;7m22          if (argc != 2) {[69G(B[m  [H[7dB+>[13d
+
+[2M[20dBreakpoint 1, main (argc=2, argv=0x7fffffffe058) at pipe_ex.c:22
+(gdb) p argv[1][15d[M[21d$1 = 0x7fffffffe3a4 "hi hi"[15d[M[21d(gdb) p argv[1][1;16H[7d   [H[7dB+>[13d[21;16H[1;16H[7d   [H[7dB+>[13d[21;16H][K0][15d[M[21d$2 = 0x7fffffffe37a "/home/ramesh/EE461S/sysprog/Pipes/pipe_ex"[15d[M[21d(gdb) display pipefd[15d[M[21d1: pipefd = {-8112, [15d[M[20;21H32767}
+(gdb) n[15d[M[21d[14;53H(B[0;7m8[67G8
+(B[m[2;5H24[13G [21Gexit(EXIT_FAILURE);
+[5G25[3;17H}             
+[5G26[4;17H// pipe takes a pointer to a 2-element array (pipefd
+[6G7[5;17H// the read and write end of the pipe in pipefd[0] a
+[5G(B[0;7m28          if (pipe(pipefd) == -1) {
+[5G(B[m29[14X[7;21Hperror("pipe");
+[5G30[8;21Hexit(EXIT_FAILURE);[29X
+[5G31[9;17H}[22X
+[5G32[10;17H 
+[5G33[11;17Hcpid = fork();[38X
+[5G34[12;17Hif (cpid == -1) {[35X[1;16H[7d   [H[6d  >[13d[6d   [H[6d  >[13d[21d1: pipefd = {-8112, [15d[M[20;21H32767}
+(gdb) n[15d[M[21d[14;52H(B[0;7m33[67Ga9
+(B[m[2;12r[12;1H[5S[1;21r[6;3H>(0[0;1;7mx(B[0;7m33          cpid = fork();
+
+[4G(0[0;1;7mx(B(B[m35[8;21Hperror("fork");[69G(0[0;1;7mx(B(B[m[9;4H(0[0;1;7mx(B(B[m36[9;21Hexit(EXIT_FAILURE);[69G(0[0;1;7mx(B(B[m[10;4H(0[0;1;7mx(B(B[m37[10;17H}[69G(0[0;1;7mx(B(B[m[11;4H(0[0;1;7mx(B(B[m38[69G(0[0;1;7mx(B(B[m[12;4H(0[0;1;7mx(B(B[m39[12;17Hif (cpid == 0) {    /* Child reads from pipe */     (0[0;1;7mx(B(B[m[1;16H(0[0;1;7m(B(B[m[6;3H [H[6d  >[13d[6d   [H[6d  >[13d[21d1: pipefd = {3, [15d[M[20;17H4}
+(gdb) n[15d[M[21d[14;53H(B[0;7m4[67Gb1
+(B[m[6;5H33          cpid = fork();
+[5G(B[0;7m34          if (cpid == -1) {[69G(B[m[A   [H[7d  >[13d[21d1: pipefd = {3, [J[15d(gdb) n[K
+1: pipefd = {-8112, 32767}
+(gdb) n[K
+1: pipefd = {3, 4}
+(gdb) n[K
+1: pipefd = {3, 4}
+(gdb) p cpid[15d[M[21d$3 = 27877[15d[M[21d(gdb) c[15d[M[21d[15d[M[20dContinuing.
+hi hi
+[15d[M[20d[Inferior 1 (process 27868) exited normally]
+[14;8H(B[0;7mNo process In: main   
+(B[m[14;23H(B[0;7m    [14;51H      L??   PC: ??
+(B[m[2;5H  [2;21H[15X
+[5G  [3;21H[19X
+[5G  [4;17H 
+[5G  
+  [6;17H[14X
+[5G[29X
+  [8;21H[15X
+[5G  [9;21H[19X
+[5G  [10;17H 
+[5G  
+  [12;17H[47X[1;16H[7;13H[ No Source Available ]   [H[13d[2;5H17[13G{
+[5G18[3;17Hint pipefd[2];
+[5G19[4;17Hpid_t cpid;
+[5G20[5;17Hchar buf;
+[5G21
+22[13G    if (argc != 2) {   
+[5G23[8;21Hfprintf(stderr, "Usage: %s <string>\n", argv[0])
+[5G24[9;21Hexit(EXIT_FAILURE);
+[5G25[10;17H}
+[5G26[11;17H// pipe takes a pointer to a 2-element array (pipefd
+[5G27[12;17H// the read and write end of the pipe in pipefd[0] a[1;16H[7dB+[13d
+
+[21d(gdb) quit[15d[M[21d[21;1H[?1049l[?1l>]0;ramesh@linuxmint ~/EE461S/sysprog/Pipes[01;32mramesh@linuxmint[00m [01;34m~/EE461S/sysprog/Pipes $[00m gdbtui pipe_ex
+[?1049h[1;21r(B[m[4l[?7h[?1h=[H[2J[14d(B[0;7mNone No process In:                                     L??   PC: ?? [15;1H(B[m[H   (0[0mlqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqk(B[2;4H(0[0mx(B[69G(0[0mx(B[3;4H(0[0mx(B[69G(0[0mx(B[4;4H(0[0mx(B[69G(0[0mx(B[5;4H(0[0mx(B[69G(0[0mx(B[6;4H(0[0mx(B[69G(0[0mx(B[7;4H(0[0mx(B[69G(0[0mx(B[8;4H(0[0mx(B[69G(0[0mx(B[9;4H(0[0mx(B[69G(0[0mx(B[10;4H(0[0mx(B[69G(0[0mx(B[11;4H(0[0mx(B[69G(0[0mx(B[12;4H(0[0mx(B[69G(0[0mx(B[13;4H(0[0mmqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqj(B[1;4H(0[0m(B[7;13H[ No Source Available ][7;13H[23X[H   [7;13H[ No Source Available ][H[7;36H[?1h=[15d[H[2J   (0[0mlqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqk(B[2;4H(0[0mx(B[69G(0[0mx(B[3;4H(0[0mx(B[69G(0[0mx(B[4;4H(0[0mx(B[69G(0[0mx(B[5;4H(0[0mx(B[69G(0[0mx(B[6;4H(0[0mx(B[69G(0[0mx(B[7;4H(0[0mx(B[7;13H(0[0m(B[ No Source Available ][69G(0[0mx(B[8;4H(0[0mx(B[69G(0[0mx(B[9;4H(0[0mx(B[69G(0[0mx(B[10;4H(0[0mx(B[69G(0[0mx(B[11;4H(0[0mx(B[69G(0[0mx(B[12;4H(0[0mx(B[69G(0[0mx(B[13;4H(0[0mmqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqj(B[14;1H(0[0m(B[0;7mNone No process In:                                     L??   PC: ?? [1;1H(B[m[7;36H[14d[H   (0[0;1;7mlqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqk(B(B[m[2;4H(0[0;1;7mx(B(B[m[69G(0[0;1;7mx(B(B[m[3;4H(0[0;1;7mx(B(B[m[69G(0[0;1;7mx(B(B[m[4;4H(0[0;1;7mx(B(B[m[69G(0[0;1;7mx(B(B[m[5;4H(0[0;1;7mx(B(B[m[69G(0[0;1;7mx(B(B[m[6;4H(0[0;1;7mx(B(B[m[69G(0[0;1;7mx(B(B[m[7;4H(0[0;1;7mx(B(B[m[7;13H(0[0;1;7m(B(B[m[23X[69G(0[0;1;7mx(B(B[m[8;4H(0[0;1;7mx(B(B[m[69G(0[0;1;7mx(B(B[m[9;4H(0[0;1;7mx(B(B[m[69G(0[0;1;7mx(B(B[m[10;4H(0[0;1;7mx(B(B[m[69G(0[0;1;7mx(B(B[m[11;4H(0[0;1;7mx(B(B[m[69G(0[0;1;7mx(B(B[m[12;4H(0[0;1;7mx(B(B[m[69G(0[0;1;7mx(B(B[m[13;4H(0[0;1;7mmqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqj(B(B[m[1;4H(0[0;1;7m(B(B[m[7;13H[ No Source Available ][H[15dGNU gdb (Ubuntu 7.11-0ubuntu1) 7.11
+Copyright (C) 2016 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/g[18;1Hpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type "show cop[21;1H---Type <return> to continue, or q <return> to quit---[15dying"[K
+and "show warranty" for details.[K
+This GDB was configured as "x86_64-linux-gnu".[K
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:[K
+<http://www.gnu.org/software/gdb/bugs/>.[K[21;55H[J[15d<http://www.gnu.org/software/gdb/bugs/>.
+---Type <return> to continue, or q <return> to quit---
+Find the GDB manual and other documentation resources online at:
+<http://www.gnu.org/software/gdb/documentation/>.[K
+[5Ghelp, type "help".[K
+Type "apropos word" to search for commands related to "word"...
+Reading symbols from pipe_ex...[15d[M[20;32Hdone.
+[1;7H(B[0;1;7mpipe_ex.c
+[5G(B[m17[13G{
+[5G18[3;17Hint pipefd[2];
+[5G19[4;17Hpid_t cpid;
+[5G20[5;17Hchar buf;
+[5G21
+22[13G    if (argc != 2) {   
+[5G23[8;21Hfprintf(stderr, "Usage: %s <string>\n", argv[0])
+[5G24[9;21Hexit(EXIT_FAILURE);
+[5G25[10;17H}
+[5G26[11;17H// pipe takes a pointer to a 2-element array (pipefd
+[5G27[12;17H// the read and write end of the pipe in pipefd[0] a[1;16H[13d
+(B[0;7mexec
+(B[m[1;16H[13d
+
+[21d(gdb) b 22[15d[M[21d[H[7db+[13d
+
+[M[20dBreakpoint 1 at 0x400854: file pipe_ex.c, line 22.
+(gdb) run "hw o ho"[15d[M[21d[15d[M[20dStarting program: /home/ramesh/EE461S/sysprog/Pipes/pipe_ex "ho ho"
+warning: [15d[2M[19;10Hthe debug information found in "/lib64/ld-2.23.so" does not
+match "/lib64/ld-linux-x86-64.so.2" (CRC mismatch).
+[15d[M[21d[1;16H[7d  [H[7db+[13d
+(B[0;7mnative process 27883 In:
+(B[m[21d[1;16H[7d  [H[7db+[13d
+
+[21d[1;16H[7d  [H[7db+[13d
+
+[21d[1;16H[7d  [H[7db+[13d
+
+[21d[1;16H[7d  [H[7db+[13d
+
+[21d[7d  [H[7dB+[13d[14;26H(B[0;7mmain[14;51HL22   PC: 0x400854
+(B[m[7;5H(B[0;7m22          if (argc != 2) {[69G(B[m  [H[7dB+>[13d
+
+[2M[20dBreakpoint 1, main (argc=2, argv=0x7fffffffe058) at pipe_ex.c:22
+(gdb) set follow-fork-mode child[15d[M[21d(gdb) display pipefd[15d[M[21d1: pipefd = {-8112, [15d[M[20;21H32767}
+(gdb) n[15d[M[21d[14;53H(B[0;7m8[67G8
+(B[m[2;5H24[13G [21Gexit(EXIT_FAILURE);
+[5G25[3;17H}             
+[5G26[4;17H// pipe takes a pointer to a 2-element array (pipefd
+[6G7[5;17H// the read and write end of the pipe in pipefd[0] a
+[5G(B[0;7m28          if (pipe(pipefd) == -1) {
+[5G(B[m29[14X[7;21Hperror("pipe");
+[5G30[8;21Hexit(EXIT_FAILURE);[29X
+[5G31[9;17H}[22X
+[5G32[10;17H 
+[5G33[11;17Hcpid = fork();[38X
+[5G34[12;17Hif (cpid == -1) {[35X[1;16H[7d   [H[6d  >[13d[6d   [H[6d  >[13d[21d1: pipefd = {-8112, [15d[M[20;21H32767}
+(gdb) n[15d[M[21d[14;52H(B[0;7m33[67Ga9
+(B[m[2;12r[12;1H[5S[1;21r[6;3H>(0[0;1;7mx(B[0;7m33          cpid = fork();
+
+[4G(0[0;1;7mx(B(B[m35[8;21Hperror("fork");[69G(0[0;1;7mx(B(B[m[9;4H(0[0;1;7mx(B(B[m36[9;21Hexit(EXIT_FAILURE);[69G(0[0;1;7mx(B(B[m[10;4H(0[0;1;7mx(B(B[m37[10;17H}[69G(0[0;1;7mx(B(B[m[11;4H(0[0;1;7mx(B(B[m38[69G(0[0;1;7mx(B(B[m[12;4H(0[0;1;7mx(B(B[m39[12;17Hif (cpid == 0) {    /* Child reads from pipe */     (0[0;1;7mx(B(B[m[1;16H(0[0;1;7m(B(B[m[6;3H [H[6d  >[13d[6d   [H[6d  >[13d[21d1: pipefd = {3, [15d[M[20;17H4}
+(gdb) n[15d[M[21d[14;8H(B[0;7mNo process In: main   
+(B[m[14;23H(B[0;7m    [14;51H      L??   PC: ??
+(B[m[2;5H  [2;21H[15X
+[5G  [3;21H[19X
+[5G  [4;17H 
+[5G  
+[26X
+  [7;17H[17X
+[5G  [8;21H[15X
+[5G  [9;21H[19X
+[5G  [10;17H 
+[5G  
+  [12;17H[47X[1;16H[7;13H[ No Source Available ][A   [H[13d[2;5H17[13G{
+[5G18[3;17Hint pipefd[2];
+[5G19[4;17Hpid_t cpid;
+[5G20[5;17Hchar buf;
+[5G21
+22[13G    if (argc != 2) {   
+[5G23[8;21Hfprintf(stderr, "Usage: %s <string>\n", argv[0])
+[5G24[9;21Hexit(EXIT_FAILURE);
+[5G25[10;17H}
+[5G26[11;17H// pipe takes a pointer to a 2-element array (pipefd
+[5G27[12;17H// the read and write end of the pipe in pipefd[0] a[1;16H[7dB+[13d
+
+[M[20d[New process 27892]
+[14;8H(B[0;7mprocess 27892 In: main[14;51HL34   PC: 0x4008b1
+(B[m[2;5H30[13G [21Gexit(EXIT_FAILURE);
+[5G31[3;17H}             
+[5G32[4;17H           
+[5G33[5;18Hpid = fork();
+[5G(B[0;7m34          if (cpid == -1) {
+[5G(B[m35[7;17H    perror("fork");
+[5G36[8;21Hexit(EXIT_FAILURE);[29X
+[5G37[9;17H}[22X
+[5G38[10;17H 
+[5G39[11;17Hif (cpid == 0) {    /* Child reads from pipe */     
+[5G40[12;17H    close(pipefd[1]);          /* Closes unused writ[1;16H[7d  [H[6d  >[13d[6d   [H[6d  >[13d
+
+[2M
+
+
+
+[Switching to process 27892]
+main (argc=2, argv=0x7fffffffe058) at pipe_ex.c:34
+1: pipefd = {3, [15d[M[20;17H4}
+(gdb) p cpid[15d[M[21d$1 = 0[15d[M[21d(gdb) n[15d[M[21d[14;53H(B[0;7m9[67Gcb
+(B[m[2;12r[12;1H[5S[1;21r[6;3H>(0[0;1;7mx(B[0;7m39          if (cpid == 0) {    /* Child reads from pipe */
+
+[4G(0[0;1;7mx(B(B[m41[69G(0[0;1;7mx(B(B[m[9;4H(0[0;1;7mx(B(B[m42[9;21Hwhile (read(pipefd[0], &buf, 1) > 0)[69G(0[0;1;7mx(B(B[m[10;4H(0[0;1;7mx(B(B[m43[10;25Hwrite(1, &buf, 1);[69G(0[0;1;7mx(B(B[m[11;4H(0[0;1;7mx(B(B[m44[69G(0[0;1;7mx(B(B[m[12;4H(0[0;1;7mx(B(B[m45[12;21Hwrite(STDOUT_FILENO, "\n", 1);[69G(0[0;1;7mx(B(B[m[1;16H(0[0;1;7m(B(B[m[6;3H [H[6d  >[13d[6d   [H[6d  >[13d[21d1: pipefd = {3, [15d[M[20;17H4}
+(gdb) n[15d[M[21d[14;52H(B[0;7m40[67Gd1
+(B[m[6;5H39          if (cpid == 0) {    /* Child reads from pipe */
+[5G(B[0;7m40              close(pipefd[1]);          /* Closes unused writ(B[m[A   [H[7d  >[13d[21d1: pipefd = {3, [15d[M[20;17H4}
+(gdb) display buf[15d[M[21d2: buf = 0 '\000'[15d[M[21d(gdb) n[15d[M[21d[14;53H(B[0;7m2[68Gb
+(B[m[7;5H40[14X[7;21Hclose(pipefd[1]);          /* Closes unused writ
+
+[5G(B[0;7m42              while (read(pipefd[0], &buf, 1) > 0)[69G(B[m[7;3H [H[9d  >
+
+
+
+[21d1: pipefd = {3, [15d[M[20;17H4}
+2: buf = 0 '\000'[15d[M[21d(gdb) n[15d[M[21d[14;53H(B[0;7m3[68Gd
+(B[m[9;5H42[14X[9;21Hwhile (read(pipefd[0], &buf, 1) > 0)
+[5G(B[0;7m43                  write(1, &buf, 1);[69G(B[m[A   [H[10d  >
+
+
+[21d1: pipefd = {3, [J[15d2: buf = 0 '\000'
+(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 0 '\000'[K
+(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 104 'h'[15d[M[21d(gdb) n[15d[M[21dh[14;53H(B[0;7m2[67Gf3
+(B[m[9;5H(B[0;7m42              while (read(pipefd[0], &buf, 1) > 0)
+[5G(B[m43[18X[10;25Hwrite(1, &buf, 1);[69G   [H[9d  >
+
+
+
+[21d1: pipefd = {3, [15d[M[20;17H4}
+2: buf = 104 'h'[J[15d(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 104 'h'[K
+(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 104 'h'[K
+(gdb) n[J[15d1: pipefd = {3, 4}
+2: buf = 104 'h'[K
+(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 104 'h'[K
+(gdb) n[K
+[14;53H(B[0;7m3[67Gdd
+(B[m[9;5H42[14X[9;21Hwhile (read(pipefd[0], &buf, 1) > 0)
+[5G(B[0;7m43                  write(1, &buf, 1);[69G(B[m[A   [H[10d  >
+
+
+[21d1: pipefd = {3, [J[15d2: buf = 104 'h'[K
+(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 104 'h'[K
+(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 111 'o'[15d[M[21d(gdb) n[15d[M[21do[14;53H(B[0;7m2[67Gf3
+(B[m[9;5H(B[0;7m42              while (read(pipefd[0], &buf, 1) > 0)
+[5G(B[m43[18X[10;25Hwrite(1, &buf, 1);[69G   [H[9d  >
+
+
+
+[21d1: pipefd = {3, [15d[M[20;17H4}
+2: buf = 111 'o'[J[15d(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 111 'o'[K
+(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 111 'o'[K
+(gdb) n[J[15d1: pipefd = {3, 4}
+2: buf = 111 'o'[K
+(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 111 'o'[K
+(gdb) n[K
+[14;53H(B[0;7m3[67Gdd
+(B[m[9;5H42[14X[9;21Hwhile (read(pipefd[0], &buf, 1) > 0)
+[5G(B[0;7m43                  write(1, &buf, 1);[69G(B[m[A   [H[10d  >
+
+
+[21d1: pipefd = {3, [J[15d2: buf = 111 'o'[K
+(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 111 'o'[K
+(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 32 ' '[15d[M[21d(gdb) n[15d[M[21d [14;53H(B[0;7m2[67Gf3
+(B[m[9;5H(B[0;7m42              while (read(pipefd[0], &buf, 1) > 0)
+[5G(B[m43[18X[10;25Hwrite(1, &buf, 1);[69G   [H[9d  >
+
+
+
+[21d1: pipefd = {3, [15d[M[20;17H4}
+2: buf = 32 ' '[J[15d(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 32 ' '[K
+(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 32 ' '[K
+(gdb) n[J[15d1: pipefd = {3, 4}
+2: buf = 32 ' '[K
+(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 32 ' '[K
+(gdb) n[K
+[14;53H(B[0;7m3[67Gdd
+(B[m[9;5H42[14X[9;21Hwhile (read(pipefd[0], &buf, 1) > 0)
+[5G(B[0;7m43                  write(1, &buf, 1);[69G(B[m[A   [H[10d  >
+
+
+[21d1: pipefd = {3, [J[15d2: buf = 32 ' '[K
+(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 32 ' '[K
+(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 104 'h'[15d[M[21d(gdb) n[15d[M[21dh[14;53H(B[0;7m2[67Gf3
+(B[m[9;5H(B[0;7m42              while (read(pipefd[0], &buf, 1) > 0)
+[5G(B[m43[18X[10;25Hwrite(1, &buf, 1);[69G   [H[9d  >
+
+
+
+[21d1: pipefd = {3, [15d[M[20;17H4}
+2: buf = 104 'h'[J[15d(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 104 'h'[K
+(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 104 'h'[K
+(gdb) n[J[15d1: pipefd = {3, 4}
+2: buf = 104 'h'[K
+(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 104 'h'[K
+(gdb) n[K
+[14;53H(B[0;7m3[67Gdd
+(B[m[9;5H42[14X[9;21Hwhile (read(pipefd[0], &buf, 1) > 0)
+[5G(B[0;7m43                  write(1, &buf, 1);[69G(B[m[A   [H[10d  >
+
+
+[21d1: pipefd = {3, [J[15d2: buf = 104 'h'[K
+(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 104 'h'[K
+(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 111 'o'[15d[M[21d(gdb) n[15d[M[21do[14;53H(B[0;7m2[67Gf3
+(B[m[9;5H(B[0;7m42              while (read(pipefd[0], &buf, 1) > 0)
+[5G(B[m43[18X[10;25Hwrite(1, &buf, 1);[69G   [H[9d  >
+
+
+
+[21d1: pipefd = {3, [15d[M[20;17H4}
+2: buf = 111 'o'[J[15d(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 111 'o'[K
+(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 111 'o'[K
+(gdb) n[J[15d1: pipefd = {3, 4}
+2: buf = 111 'o'[K
+(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 111 'o'[K
+(gdb) n[K
+[14;53H(B[0;7m5[66G90e
+(B[m[2;5H41[2;21H[15X
+[5G42[3;21Hwhile (read(pipefd[0], &buf, 1) > 0)
+[5G43[4;17H [25Gwrite(1, &buf, 1);
+[5G44
+(B[0;7m45              write(STDOUT_FILENO, "\n", 1);(B[m             
+[6G6[7;34H0[7;48H[21X
+[6G7[8;21H_exit(EXIT_SUCCESS);
+[5G48[50X
+9[10;17H} else {            /* Parent writes argv[1] to pipe
+[5G50[11;21Hclose(pipefd[0]);[11;48H/* Close unused read
+[5G51[12;27Hpipefd[1], argv[1], strlen(argv[1]));[1;16H[9;3H [H[6d  >[13d[6d   [H[6d  >[13d[21d1: pipefd = {3, [J[15d2: buf = 111 'o'[K
+(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 111 'o'[K
+(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 111 'o'[J[15d(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 111 'o'[K
+(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 111 'o'[K
+(gdb) n[J[15d1: pipefd = {3, 4}
+2: buf = 111 'o'[K
+(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 111 'o'[K
+(gdb) n[K
+
+[14;53H(B[0;7m6[67G22
+(B[m[6;5H45[14X[6;21Hwrite(STDOUT_FILENO, "\n", 1);
+[5G(B[0;7m46              close(pipefd[0]);[69G(B[m[A   [H[7d  >[13d[21d1: pipefd = {3, [J[15d2: buf = 111 'o'[K
+(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 111 'o'[K
+(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 111 'o'[J[15d(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 111 'o'[K
+(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 111 'o'[K
+(gdb) n[J[15d1: pipefd = {3, 4}
+2: buf = 111 'o'[K
+(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 111 'o'[K
+(gdb) n[K
+[14;53H(B[0;7m7[68Gc
+(B[m[7;5H46[14X[7;21Hclose(pipefd[0]);
+[5G(B[0;7m47              _exit(EXIT_SUCCESS);[69G(B[m[A   [H[8d  >[13d[21d1: pipefd = {3, [J[15d2: buf = 111 'o'[K
+(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 111 'o'[K
+(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 111 'o'[J[15d(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 111 'o'[K
+(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 111 'o'[K
+(gdb) n[J[15d1: pipefd = {3, 4}
+2: buf = 111 'o'[K
+(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 111 'o'[K
+(gdb) n[K
+[15d2: buf = 111 'o'[K
+(gdb) n[K
+1: pipefd = {3, 4}
+2: buf = 111 'o'[K
+(gdb) n[K
+[Inferior 2 (process 27892) exited normally]
+[14;8H(B[0;7mNo process In: main   
+(B[m[14;23H(B[0;7m    [14;51H      L??   PC: ??
+(B[m[2;5H  
+  [3;21H[36X
+[5G  [4;25H[18X
+[5G  
+  [6;21H[30X
+[5G  [7;21H[17X
+[5G[36X
+  
+  [10;17H        [10;37H[32X
+[5G  [11;21H[17X[11;48H[20X
+[5G  [12;21H[43X[1;16H[7;13H[ No Source Available ]
+   [H[13d[2;5H17[13G{
+[5G18[3;17Hint pipefd[2];
+[5G19[4;17Hpid_t cpid;
+[5G20[5;17Hchar buf;
+[5G21
+22[13G    if (argc != 2) {   
+[5G23[8;21Hfprintf(stderr, "Usage: %s <string>\n", argv[0])
+[5G24[9;21Hexit(EXIT_FAILURE);
+[5G25[10;17H}
+[5G26[11;17H// pipe takes a pointer to a 2-element array (pipefd
+[5G27[12;17H// the read and write end of the pipe in pipefd[0] a[1;16H[7dB+[13d
+
+[21d(gdb) quit[15d[M[21d[21;1H[?1049l[?1l>]0;ramesh@linuxmint ~/EE461S/sysprog/Pipes[01;32mramesh@linuxmint[00m [01;34m~/EE461S/sysprog/Pipes $[00m exit
+
+Script done on Tue 05 Sep 2017 14:15:59 CDT
