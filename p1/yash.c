@@ -39,7 +39,6 @@ enum { in, out, err};
 typedef struct job
 {
   struct job *previous;	//
-  struct job *next;
   char *command;              /* command*/
   pid_t pgid;                 /* process group ID */
   bool running;
@@ -53,6 +52,7 @@ FUNCTION PROTOTYPES
 void handleProcess(char** args);
 void handleParent(int numChildren);
 void handleRedirect(char* fileName, direction dir);
+void handleJob();
 void handleChild(char* child);
 bool readFromFile(char* fileName, char* output, int maxLength);
 void writeToFile(char* fileName, char* message);
@@ -61,7 +61,7 @@ void handlePipe(char* child1, char* child2);
 /*
 GLOBALS
 */
-job *head = NULL;
+job *tail = NULL;
 int pipefd[2];
 int status, pid_ch1, pid_ch2, pid;
 int jobNumber = 0;
@@ -82,50 +82,89 @@ static void sig_handler(int signo) {
 }
 
 int main (void) {
+	char previous[MAXCHARS];
+	char poll[MAXCHARS];
 	char input[MAXCHARS];
-	char output[MAXCHARS];
-	char *process;
-	char **token;
+	char** process;
+	int i = 0;
+	//input[0] = '\0';
 	printf("# ");
+
 	fgets(input, MAXCHARS, stdin);
 	strTrim(input);
 	job j;
 	jobNumber++;
-	if(*head == NULL) {
-		head = &j;				// make new job head b/c no other jobs exist
-		j.previous = NULL;
-	} else {
-		job current = *head;
-		while(current.next != NULL) {
-			&current = current.next;
-		}
-		current.next = &j;	//add new job to list
-		j.previous = &current;
-	}
-	j.next = NULL;
 	j.running = true;
-	j.foreground = true;
+	j.foreground = !strContains(input, "&");
 	j.jobNumber = jobNumber;
 	strcpy(j.command, input);
 
-	handleJob(&j);
-	// if(strContains(input, "|")) {
-	// 	token = strSplit(input, '|');
-	// 	handlePipe(&j, token[0], token[1]);
-	// } else {
-	// 	pid_ch1 = fork();
-	// 	if(pid_ch1 == 0) {
-	// 		handleChild(&j input);
-	// 	} else {
-	// 		handleParent(1);
-	// 	}
-	// }
+	if(tail == NULL) {
+		tail = &j;
+		j.previous = NULL;
+	} else {
+		j.previous = tail;
+		tail = &j;
+	}
+	handleJob(); // handles job @ Tail		
+	i++;
+}
+
+void handleJob() {
+	bool hasPipe = strContains((*tail).command, "|");
+	char** commands = strSplit((*tail).command, '|');
+	int i = 0;
+	while(commands[i] != '\0') {
+		strTrim(commands[i]);
+		i++;
+	}
+
+	if(pipe(pipefd) == -1) {
+		perror("pipe");
+		exit(-1);
+	}
+
+	pid_ch1 = fork();
+	if(pid_ch1 > 0) {
+		sleep(1); // make child 1 first
+		if(hasPipe) {
+			pid_ch2 = fork();
+			if(pid_ch2 > 0) {
+				// Parent w/ 2 children
+				setpgid(pid_ch1, 0);
+				setpgid(pid_ch2, pid_ch1);
+				handleParent(2);
+			} else {
+				//Child 2
+				//sleep(1);
+				close(pipefd[PIPE_WRITE]);	//close write;
+				dup2(pipefd[PIPE_READ], STDIN_FILENO);
+				handleChild(commands[1]);
+			}
+		} else {
+			//Parent w/ 1 child
+			setpgid(pid_ch1, 0);
+			handleParent(1);
+		}
+	} else {
+		//Child 1
+		(*tail).pgid = pid_ch1;
+		if(hasPipe) {
+			close(pipefd[PIPE_READ]);
+			dup2(pipefd[PIPE_WRITE], STDOUT_FILENO);			
+		}
+		handleChild(commands[0]);
+	}
+	(*tail).pgid = pid_ch1;
 }
 
 void handleParent(int numChildren) {
 	int count = 0;
 	close(pipefd[PIPE_WRITE]);
 	close(pipefd[PIPE_READ]);
+
+	//tcsetpgrp(pid_ch1);
+
 
 	if(signal(SIGINT, sig_handler) == SIG_ERR) {
 		printf("signal(SIGINT) error");
@@ -152,13 +191,13 @@ void handleParent(int numChildren) {
 		} else if (WIFSTOPPED(status)) {
 		    printf("%d stopped by signal %d\n", pid, WSTOPSIG(status));
 		    printf("Sending CONT to %d\n", pid);
-		    sleep(5); //sleep for 4 seconds before sending CONT
+		    sleep(4); //sleep for 4 seconds before sending CONT
 		    kill(pid,SIGCONT);
 		} else if (WIFCONTINUED(status)) {
 		    printf("Continuing %d\n",pid);
 		}
 	}
-	exit(1);
+	//exit(1);
 }
 
 /*
@@ -187,52 +226,6 @@ void handleRedirect(char* fileName, direction dir) {
 	dup2(fileno(file), dir);
 	fclose(file);
 }
-
-void handleJob(job* j) {
-	bool hasPipe = strContains(j*.command, "|");
-	char** commands = strSplit(j*.command, "|");
-	char** tokens = strSplit(child, ' ');
-	char** child1Args;
-	char** child2Args;
-	int i = 0;
-	while(tokens[i] != NULL) {
-		strTrim(tokens[i]);
-		i++;
-	}
-	i = 0;
-	pid_ch1 = fork();
-	if(pid_ch1 > 0) {
-		if(hasPipe) {
-			pid_ch2 = fork();
-			if(pid_ch2 > 0) {
-				// Parent w/ 2 children
-				handleParent(2);
-			} else {
-				//Child 2
-				sleep(1);
-				setpgid(0,pid_ch1);	//child 2 joins child 1's group
-				close(pipefd[PIPE_WRITE]);	//close write;
-				dup2(pipefd[PIPE_READ], STDIN_FILENO);
-				strTrim(commands[1]);
-				handleChild(commands[1]);
-			}
-		} else {
-			//Parent w/ 1 child
-			handleParent(1);
-		}
-	} else {
-		//Child 1
-		setsid();		// set pgid, establish child 1 as process leader
-		j*.pgid = pid_ch1;
-		if(hasPipe) {
-			close(pipefd[PIPE_READ]);
-			dup2(pipefd[PIPE_WRITE], STDOUT_FILENO);			
-		}
-		strTrim(commands[0]);
-		handleChild(commands[0]);
-	}
-}
-
 
 /*
 Brief:
@@ -267,67 +260,11 @@ void handleChild(char* child) {
 		if(strContains(tokens[i], "<") || strContains(tokens[i], ">") || strContains(tokens[i], "2>")) {
 			tokens[i] = '\0';
 			break;
-			handleProcess(tokens);
 		}
 		i++;
 	}
+	handleProcess(tokens);
 }
-
-/*
-Brief:
-	Executes two children processes after creating a pipe and linking the first processes' std out ls from a pipe
-Params:
-	child1 	> first child's string separate from pipe
-	child2 	> second child's string sepatare from pipe
-	i.e. 
-		child1 = "ls > B.txt"
-		child2 = "grep .txt < A.txt > C.txt"
-Return:
-	Void
-*/
-void handlePipe(job* j, char* child1, char* child2) {
-	char **child1Args;
-	char **child2Args;
-	//int count = 0;
-
-	if(pipe(pipefd) == -1) {
-		perror("pipe");
-		exit(-1);
-	}
-
-	pid_ch1 = fork();
-	j*.pgid = pid_ch1;
-	if(pid_ch1 > 0) {
-		//PARENT
-		printf("Child1 pid = %d\n", pid_ch1);
-		pid_ch2 = fork();
-		if(pid_ch2 > 0) {
-			//PARENT
-			printf("Child2 pid = %d\n", pid_ch2);
-			handleParent(2);
-		} else {
-			//CHILD 2
-			sleep(1);//let CHILD 1 run first
-			setpgid(0,pid_ch1);	//child 2 joins child 1's group
-			close(pipefd[PIPE_WRITE]);	//close write;
-			dup2(pipefd[PIPE_READ], STDIN_FILENO);
-			strTrim(child2);
-			child2Args = strSplit(child2, ' ');
-			//handleProcess(child2Args);
-			handleChild(child2);
-		}
-	} else {
-		//CHILD 1
-		setsid();
-		close(pipefd[PIPE_READ]);
-		dup2(pipefd[PIPE_WRITE], STDOUT_FILENO);
-		strTrim(child1);
-		child1Args = strSplit(child1, ' ');
-		//handleProcess(child1Args);
-		handleChild(child1);
-	}
-}
-
 /*
 Brief:
 	Runs a process given its parameters
@@ -337,7 +274,7 @@ Params:
 Return:
 	Void
 */
-void handleProcess(job* j, char** args) {
+void handleProcess(char** args) {
 	char* myargs[30];
 	int i = 0;
 	while(1) {
