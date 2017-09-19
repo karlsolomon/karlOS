@@ -63,7 +63,8 @@ GLOBALS
 */
 job *tail = NULL;
 int pipefd[2];
-int status, pid_ch1, pid_ch2, pid;
+char termid[L_ctermid];
+int status, pid_ch1, pid_ch2, pid, parentPID;
 int jobNumber = 0;
 
 static void sig_handler(int signo) {
@@ -82,32 +83,39 @@ static void sig_handler(int signo) {
 }
 
 int main (void) {
+	parentPID =  setsid();	// creates a new session
 	char previous[MAXCHARS];
 	char poll[MAXCHARS];
 	char input[MAXCHARS];
 	char** process;
 	int i = 0;
+	ctermid(termid);
 	//input[0] = '\0';
 	printf("# ");
+	while(fgets(input, MAXCHARS, stdin) != NULL) {
+		strTrim(input);
+		job j;
+		jobNumber++;
+		j.running = true;
+		j.foreground = !strContains(input, "&");
+		j.jobNumber = jobNumber;
+		strcpy(j.command, input);
 
-	fgets(input, MAXCHARS, stdin);
-	strTrim(input);
-	job j;
-	jobNumber++;
-	j.running = true;
-	j.foreground = !strContains(input, "&");
-	j.jobNumber = jobNumber;
-	strcpy(j.command, input);
-
-	if(tail == NULL) {
-		tail = &j;
-		j.previous = NULL;
-	} else {
-		j.previous = tail;
-		tail = &j;
+		if(tail == NULL) {
+			tail = &j;
+			j.previous = NULL;
+		} else {
+			j.previous = tail;
+			tail = &j;
+		}
+		handleJob(); // handles job @ Tail		
+		i++;
+		printf("# ");
 	}
-	handleJob(); // handles job @ Tail		
-	i++;
+	exit(0);
+	
+	//fgets(input, MAXCHARS, stdin)
+	
 }
 
 void handleJob() {
@@ -162,14 +170,18 @@ void handleParent(int numChildren) {
 	int count = 0;
 	close(pipefd[PIPE_WRITE]);
 	close(pipefd[PIPE_READ]);
-
-	//tcsetpgrp(pid_ch1);
-
+	FILE* fp = fopen(termid, "r");
+	bool test;
+	// if((*tail).foreground == true) {
+	// 	test = tcsetpgrp(fileno(fp), pid_ch1);
+	// }
 
 	if(signal(SIGINT, sig_handler) == SIG_ERR) {
 		printf("signal(SIGINT) error");
 	} else if (signal(SIGTSTP, sig_handler) == SIG_ERR) {
 		printf("signal(SIGTSTP) error");
+	} else if (signal(SIGTTOU, sig_handler) == SIG_ERR) {
+		printf("signal(SIGTTOU) error");
 	}
 	// else if (signal(SIGCHLD, sig_handler) == SIG_ERR) {
 	//  	printf("signal(SIGCHLD) error");
@@ -177,10 +189,12 @@ void handleParent(int numChildren) {
 
 	while(count < numChildren) {
 		pid = waitpid(-1, &status, WUNTRACED | WCONTINUED);
+		//test = tcsetpgrp(fileno(fp), parentPID);
 		if (pid == -1) {
 		    perror("waitpid");
 		    exit(EXIT_FAILURE);
 		}
+
 
 		if (WIFEXITED(status)) {
 		    printf("child %d exited, status=%d\n", pid, WEXITSTATUS(status));
@@ -190,9 +204,6 @@ void handleParent(int numChildren) {
 		    count++;
 		} else if (WIFSTOPPED(status)) {
 		    printf("%d stopped by signal %d\n", pid, WSTOPSIG(status));
-		    printf("Sending CONT to %d\n", pid);
-		    sleep(4); //sleep for 4 seconds before sending CONT
-		    kill(pid,SIGCONT);
 		} else if (WIFCONTINUED(status)) {
 		    printf("Continuing %d\n",pid);
 		}
@@ -287,4 +298,5 @@ void handleProcess(char** args) {
 		i++;
 	}
 	execvp(myargs[0], myargs);
+	exit(1);
 }
