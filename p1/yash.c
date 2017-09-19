@@ -43,6 +43,7 @@ typedef struct job
   pid_t pgid;                 /* process group ID */
   bool running;
   bool foreground;
+  bool done;
   int jobNumber;
 } job;
 
@@ -57,6 +58,10 @@ void handleChild(char* child);
 bool readFromFile(char* fileName, char* output, int maxLength);
 void writeToFile(char* fileName, char* message);
 void handlePipe(char* child1, char* child2);
+void getJobTableOutput(char* output, job* j);
+void getJobTable(char* output);
+
+void getJobTableOutput(char* output, job* j);
 
 /*
 GLOBALS
@@ -84,9 +89,8 @@ static void sig_handler(int signo) {
 
 int main (void) {
 	parentPID =  setsid();	// creates a new session
-	char previous[MAXCHARS];
-	char poll[MAXCHARS];
-	char input[MAXCHARS];
+	char input[MAXCHARS + 1];
+	char jobTable[MAXCHARS + 1];
 	char** process;
 	int i = 0;
 	ctermid(termid);
@@ -97,10 +101,10 @@ int main (void) {
 		job j;
 		jobNumber++;
 		j.running = true;
+		j.done = false;
 		j.foreground = !strContains(input, "&");
 		j.jobNumber = jobNumber;
-		strcpy(j.command, input);
-
+		j.command = strdup(input);
 		if(tail == NULL) {
 			tail = &j;
 			j.previous = NULL;
@@ -108,6 +112,7 @@ int main (void) {
 			j.previous = tail;
 			tail = &j;
 		}
+		getJobTableOutput(jobTable, tail);
 		handleJob(); // handles job @ Tail		
 		i++;
 		printf("# ");
@@ -171,10 +176,14 @@ void handleParent(int numChildren) {
 	close(pipefd[PIPE_WRITE]);
 	close(pipefd[PIPE_READ]);
 	FILE* fp = fopen(termid, "r");
-	bool test;
+	// bool test;
 	// if((*tail).foreground == true) {
 	// 	test = tcsetpgrp(fileno(fp), pid_ch1);
 	// }
+	//putJobInForeground(tail, false);
+
+
+
 
 	if(signal(SIGINT, sig_handler) == SIG_ERR) {
 		printf("signal(SIGINT) error");
@@ -208,8 +217,35 @@ void handleParent(int numChildren) {
 		    printf("Continuing %d\n",pid);
 		}
 	}
-	//exit(1);
 }
+
+// void waitForJob(job )
+
+
+// void putJobInForeground(job *j, int cont) {
+// 	  /* Put the job into the foreground.  */
+//   int shell_terminal = fileno(fp);
+//   tcsetpgrp (shell_terminal, j->pgid);
+
+
+//   /* Send the job a continue signal, if necessary.  */
+//   if (cont)
+//     {
+//       if (kill (- j->pgid, SIGCONT) < 0)
+//         perror ("kill (SIGCONT)");
+//     }
+
+
+//   /* Wait for it to report.  */
+//   wait_for_job (j);
+
+//   /* Put the shell back in the foreground.  */
+//   tcsetpgrp (shell_terminal, parentPID);
+
+//   /* Restore the shell’s terminal modes.  */
+//   // tcgetattr (shell_terminal, &j->tmodes);
+//   // tcsetattr (shell_terminal, TCSADRAIN, &shell_tmodes);
+// }
 
 /*
 Brief:
@@ -299,4 +335,39 @@ void handleProcess(char** args) {
 	}
 	execvp(myargs[0], myargs);
 	exit(1);
+}
+
+
+void getJobTable(char* output) {
+	output[0] = '\0'; //reinit table
+	job* current = tail;
+	getJobTableOutput(output, tail);
+	while(current->previous != NULL) {
+		getJobTableOutput(output, current);
+		current = current->previous;
+	}
+}
+
+void getJobTableOutput(char* output, job* j) {
+	char currentJobString[200];
+	currentJobString[0] = '\0';
+	if(j == NULL) {
+		return;
+	}
+	sprintf(currentJobString, "[%d] ", j->jobNumber);
+	if(j-> foreground) {
+		strcat(currentJobString, "+ ");
+	} else {
+		strcat(currentJobString, "- ");
+	}
+	if(j->done) {
+		strcat(currentJobString, "Done\t");
+	} else if(j->running) {
+		strcat(currentJobString, "Running\t");
+	} else {
+		strcat(currentJobString, "Stopped\t");
+	}
+	strcat(currentJobString, j->command);
+	strcat(currentJobString, "\n");
+	strPrepend(output, currentJobString);
 }

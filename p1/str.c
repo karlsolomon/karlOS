@@ -69,4 +69,9 @@ void strTrim(char* str) {
 
 int strContains(char* src, char* token) {
 	return (strstr(src, token) != NULL);
-} 
+}
+
+void strPrepend(char* dest, char* src) {
+	memmove(dest + strlen(src), dest, strlen(dest) + 1);
+	strncpy(dest, src, strlen(src));
+}
